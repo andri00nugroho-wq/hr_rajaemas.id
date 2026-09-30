@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Raja Emas Indonesia — HRD Admin Dashboard</title>
+<style>
+:root{
+ --ink:#10091A;--purple:#2B0A45;--purple2:#4A176B;--gold:#D4AF37;--gold2:#F5E6A8;
+ --bg:#F5F3F0;--card:#fff;--text:#211B25;--muted:#746D79;--line:#E7E1D9;
+ --green:#17824B;--red:#B42318;--orange:#B76E00;--blue:#315EA8;
+ --shadow:0 10px 30px rgba(20,8,30,.07)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}a{text-decoration:none;color:inherit}
+.app{min-height:100vh;background:var(--bg)}
+.top{height:68px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:50}
+.brand{display:flex;align-items:center;gap:11px}.logo{width:42px;height:42px;border:1px solid var(--gold);border-radius:12px;display:grid;place-items:center;color:var(--gold);font-size:21px}
+.brand b{font-family:Georgia,serif;letter-spacing:.5px}.brand small{display:block;color:#d8cda9;font-size:9px;letter-spacing:1.8px}
+.top-right{display:flex;align-items:center;gap:14px}.admin{display:flex;align-items:center;gap:9px}.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#2b1900;display:grid;place-items:center;font-weight:900}
+.layout{display:grid;grid-template-columns:255px 1fr;min-height:calc(100vh - 68px)}
+.sidebar{background:#fff;border-right:1px solid var(--line);padding:18px 12px;position:sticky;top:68px;height:calc(100vh - 68px);overflow:auto}
+.menu-title{font-size:10px;font-weight:900;color:#9a929e;letter-spacing:1.2px;text-transform:uppercase;padding:12px 12px 7px}
+.nav-btn{width:100%;text-align:left;background:transparent;padding:11px 12px;border-radius:10px;color:#5b5460;font-weight:700;margin:2px 0;display:flex;align-items:center;gap:10px}
+.nav-btn:hover,.nav-btn.active{background:#fbf4dc;color:#72550b}.nav-btn .count{margin-left:auto;font-size:10px;background:#eee8de;padding:2px 6px;border-radius:99px}
+.content{padding:26px;max-width:1600px;width:100%;margin:auto}
+.mobile-bar{display:none}
+.page{display:none}.page.active{display:block}
+.page-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:20px}
+.page-head h1{font-size:27px;letter-spacing:-.5px}.page-head p{color:var(--muted);font-size:13px;margin-top:4px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{padding:10px 14px;border-radius:10px;font-weight:800;display:inline-flex;align-items:center;gap:7px}
+.btn-gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#241a05}.btn-dark{background:var(--ink);color:#fff}.btn-light{background:#fff;border:1px solid var(--line);color:#443c47}.btn-danger{background:#fff0ee;color:var(--red);border:1px solid #f1cbc6}.btn-sm{padding:7px 10px;font-size:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.kpi:after{content:"";position:absolute;right:-25px;top:-30px;width:85px;height:85px;border:1px solid #eee1b7;border-radius:50%}
+.kpi .label{font-size:12px;color:var(--muted);font-weight:700}.kpi .value{font-size:28px;font-weight:900;margin:5px 0}.kpi .trend{font-size:11px;color:var(--green);font-weight:800}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}.card-pad{padding:18px}.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 18px;border-bottom:1px solid var(--line)}.card-head h3{font-size:15px}.muted{color:var(--muted)}
+.dashboard-grid{display:grid;grid-template-columns:1.4fr .9fr;gap:16px;margin-top:16px}
+.pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.stage{background:#faf8f5;border:1px solid var(--line);border-radius:12px;padding:13px}.stage b{display:block;font-size:20px}.stage span{font-size:11px;color:var(--muted)}
+.bar-list{display:grid;gap:12px}.bar-row{display:grid;grid-template-columns:130px 1fr 42px;align-items:center;gap:9px;font-size:12px}.bar{height:8px;background:#eee9e2;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--gold));border-radius:99px}
+.activity{display:grid;gap:12px}.activity-item{display:flex;gap:10px;align-items:flex-start}.dot{width:9px;height:9px;background:var(--gold);border-radius:50%;margin-top:6px;flex:0 0 auto}.activity-item b{font-size:12px}.activity-item small{display:block;color:var(--muted);font-size:11px}
+.filters{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr auto;gap:8px;margin-bottom:15px}.input,.select,.textarea{width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:9px;background:#fff;outline:0}.input:focus,.select:focus,.textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px #d4af3720}
+.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:820px}.table th,.table td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;font-size:12px;vertical-align:middle}.table th{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:#8b838e;background:#fbfaf8}.table tr:hover td{background:#fffdf8}
+.person{display:flex;align-items:center;gap:9px}.mini-avatar{width:33px;height:33px;border-radius:10px;background:#f3ecf7;color:var(--purple);display:grid;place-items:center;font-weight:900;font-size:11px}.person b{display:block}.person small{color:var(--muted)}
+.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:10px;font-weight:900}.green{background:#eaf7ef;color:#176b40}.yellow{background:#fff6d8;color:#7c5d00}.red{background:#ffeded;color:#a52218}.purple{background:#f1eafa;color:#63327d}.blue{background:#eaf1ff;color:#315ea8}
+.pagination{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;font-size:11px;color:var(--muted)}
+.job-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.job-card{padding:17px;border:1px solid var(--line);border-radius:14px;background:#fff}.job-card h3{font-size:15px;margin:8px 0 3px}.job-card p{font-size:12px;color:var(--muted)}.job-meta{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.job-meta span{background:#faf8f5;border:1px solid #eee8de;padding:5px 7px;border-radius:7px;font-size:10px}
+.chart{height:240px;display:flex;align-items:end;gap:12px;padding:20px 8px 10px}.col{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:end}.col i{display:block;width:65%;background:linear-gradient(180deg,var(--gold),var(--purple));border-radius:7px 7px 2px 2px;min-height:5px}.col span{font-size:10px;color:var(--muted)}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.detail{background:#faf8f5;border:1px solid var(--line);border-radius:11px;padding:12px}.detail small{color:var(--muted);display:block;font-size:10px}.detail b{font-size:13px}
+.modal-bg{position:fixed;inset:0;background:#0a0610aa;z-index:100;display:none;align-items:center;justify-content:center;padding:18px}.modal-bg.show{display:flex}.modal{width:min(720px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:18px}.modal-head{padding:17px 20px;background:linear-gradient(135deg,var(--ink),var(--purple));color:#fff;display:flex;justify-content:space-between}.modal-body{padding:20px}.close{background:transparent;color:#fff;font-size:24px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-group label{display:block;font-size:11px;font-weight:900;margin-bottom:5px}.form-group.span2{grid-column:1/-1}.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.toast{position:fixed;right:18px;bottom:18px;background:var(--ink);color:#fff;padding:12px 15px;border-radius:10px;display:none;z-index:200;font-size:12px}.toast.show{display:block}
+@media(max-width:1100px){.grid4{grid-template-columns:repeat(2,1fr)}.dashboard-grid{grid-template-columns:1fr}.job-cards{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr 1fr 1fr}.filters .wide{grid-column:1/-1}}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.sidebar{display:none}.sidebar.open{display:block;position:fixed;z-index:45;top:68px;left:0;width:280px;height:calc(100vh - 68px);box-shadow:20px 0 50px #0002}.mobile-bar{display:flex;background:#fff;border-bottom:1px solid var(--line);padding:10px 14px;justify-content:space-between}.content{padding:17px}.page-head{display:block}.page-head .actions{margin-top:12px}.pipeline{grid-template-columns:repeat(2,1fr)}.bar-row{grid-template-columns:90px 1fr 30px}.top{padding:0 14px}.admin .role{display:none}}
+@media(max-width:600px){.grid4{grid-template-columns:1fr 1fr;gap:9px}.kpi{padding:13px}.kpi .value{font-size:22px}.job-cards{grid-template-columns:1fr}.filters{grid-template-columns:1fr}.filters .wide{grid-column:auto}.form-grid{grid-template-columns:1fr}.form-group.span2{grid-column:auto}.brand b{font-size:14px}.top-right .name{display:none}.detail-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+ <div class="brand"><div class="logo">♛</div><div><b>RAJA EMAS INDONESIA</b><small>HRD ADMIN SYSTEM</small></div></div>
+ <div class="top-right"><button class="btn btn-light btn-sm" onclick="notify('Sinkronisasi data selesai')">↻ Sync</button><div class="admin"><div class="avatar">HR</div><div class="name"><b style="font-size:12px">HRD Administrator</b><small style="display:block;color:#bdb5c3;font-size:10px">Human Resources</small></div></div></div>
+</header>
+<div class="mobile-bar"><button class="btn btn-light btn-sm" onclick="toggleSide()">☰ Menu</button><span style="font-size:12px;font-weight:900">HRD Dashboard</span><button class="btn btn-gold btn-sm" onclick="openModal('candidate')">+ Kandidat</button></div>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+ <div class="menu-title">Overview</div>
+ <button class="nav-btn active" data-page="dashboard" onclick="showPage('dashboard')">▣ Dashboard</button>
+ <button class="nav-btn" data-page="analytics" onclick="showPage('analytics')">◔ Analytics & Report</button>
+ <div class="menu-title">Recruitment</div>
+ <button class="nav-btn" data-page="candidates" onclick="showPage('candidates')">♙ Kandidat <span class="count">128</span></button>
+ <button class="nav-btn" data-page="applications" onclick="showPage('applications')">▤ Lamaran <span class="count">42</span></button>
+ <button class="nav-btn" data-page="vacancies" onclick="showPage('vacancies')">▣ Lowongan <span class="count">8</span></button>
+ <button class="nav-btn" data-page="interviews" onclick="showPage('interviews')">◷ Interview</button>
+ <button class="nav-btn" data-page="tests" onclick="showPage('tests')">✎ Psikotes</button>
+ <div class="menu-title">HR Management</div>
+ <button class="nav-btn" data-page="employees" onclick="showPage('employees')">♟ Karyawan</button>
+ <button class="nav-btn" data-page="onboarding" onclick="showPage('onboarding')">✓ Onboarding</button>
+ <button class="nav-btn" data-page="documents" onclick="showPage('documents')">▧ Dokumen</button>
+ <div class="menu-title">System</div>
+ <button class="nav-btn" data-page="settings" onclick="showPage('settings')">⚙ Pengaturan</button>
+</aside>
+<main class="content">
+
+<section class="page active" id="page-dashboard">
+ <div class="page-head"><div><h1>Dashboard HRD</h1><p>Ringkasan aktivitas recruitment dan kandidat hari ini.</p></div><div class="actions"><button class="btn btn-light" onclick="exportCSV()">↓ Export</button><button class="btn btn-gold" onclick="openModal('vacancy')">＋ Buat Lowongan</button></div></div>
+ <div class="grid4">
+  <div class="kpi"><span class="label">Total Kandidat</span><div class="value">128</div><span class="trend">↑ 12% bulan ini</span></div>
+  <div class="kpi"><span class="label">Lamaran Baru</span><div class="value">42</div><span class="trend">↑ 8 hari ini</span></div>
+  <div class="kpi"><span class="label">Interview Terjadwal</span><div class="value">17</div><span class="trend">5 hari ini</span></div>
+  <div class="kpi"><span class="label">Lowongan Aktif</span><div class="value">8</div><span class="trend">2 hampir tutup</span></div>
+ </div>
+ <div class="card card-pad" style="margin-top:16px"><div class="card-head" style="padding:0 0 14px;border:0"><h3>Recruitment Pipeline</h3><span class="muted" style="font-size:11px">September 2026</span></div>
+  <div class="pipeline"><div class="stage"><b>128</b><span>All Kandidat</span></div><div class="stage"><b>74</b><span>Screening</span></div><div class="stage"><b>38</b><span>Psikotes</span></div><div class="stage"><b>17</b><span>Interview</span></div><div class="stage"><b>7</b><span>Offering</span></div></div>
+ </div>
+ <div class="dashboard-grid">
+  <div class="card"><div class="card-head"><h3>Lamaran per Posisi</h3><button class="btn btn-light btn-sm" onclick="showPage('analytics')">Lihat laporan</button></div><div class="card-pad"><div class="bar-list">
+   <div class="bar-row"><span>Gold Advisor</span><div class="bar"><i style="width:86%"></i></div><b>34</b></div>
+   <div class="bar-row"><span>Store Supervisor</span><div class="bar"><i style="width:68%"></i></div><b>27</b></div>
+   <div class="bar-row"><span>Customer Service</span><div class="bar"><i style="width:51%"></i></div><b>20</b></div>
+   <div class="bar-row"><span>Admin Operasional</span><div class="bar"><i style="width:43%"></i></div><b>17</b></div>
+   <div class="bar-row"><span>IT Support</span><div class="bar"><i style="width:25%"></i></div><b>10</b></div>
+  </div></div></div>
+  <div class="card"><div class="card-head"><h3>Aktivitas Terbaru</h3><span class="badge purple">Live</span></div><div class="card-pad"><div class="activity">
+   <div class="activity-item"><i class="dot"></i><div><b>Rina Maharani mengirim lamaran</b><small>Gold Advisor • 4 menit lalu</small></div></div>
+   <div class="activity-item"><i class="dot"></i><div><b>Interview dijadwalkan</b><small>Andi Saputra • 09.30 WIB</small></div></div>
+   <div class="activity-item"><i class="dot"></i><div><b>Psikotes selesai</b><small>Dewi Lestari • Store Supervisor</small></div></div>
+   <div class="activity-item"><i class="dot"></i><div><b>Lowongan dipublikasikan</b><small>Admin Operasional • Bandung</small></div></div>
+  </div></div></div>
+ </div>
+ <div class="card" style="margin-top:16px"><div class="card-head"><h3>Kandidat yang Perlu Ditindaklanjuti</h3><button class="btn btn-light btn-sm" onclick="showPage('applications')">Lihat semua</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Kandidat</th><th>Posisi</th><th>Tahap</th><th>Score</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="dashboardTable"></tbody></table></div></div>
+</section>
+
+<section class="page" id="page-candidates">
+ <div class="page-head"><div><h1>Database Kandidat</h1><p>Kelola profil, dokumen, tahap seleksi, dan riwayat kandidat.</p></div><div class="actions"><button class="btn btn-light" onclick="exportCSV()">↓ Export CSV</button><button class="btn btn-gold" onclick="openModal('candidate')">＋ Tambah Kandidat</button></div></div>
+ <div class="card"><div class="card-pad"><div class="filters"><input class="input wide" id="candidateSearch" oninput="renderCandidates()" placeholder="Cari nama, email, posisi..."><select class="select" id="candidateStage" onchange="renderCandidates()"><option value="">Semua tahap</option><option>Screening</option><option>Psikotes</option><option>Interview</option><option>Offering</option><option>Rejected</option></select><select class="select" id="candidateLoc" onchange="renderCandidates()"><option value="">Semua lokasi</option><option>Jakarta</option><option>Bekasi</option><option>Bandung</option><option>Semarang</option><option>Surabaya</option></select><select class="select"><option>Terbaru</option><option>Nama A-Z</option><option>Score tertinggi</option></select><button class="btn btn-dark" onclick="renderCandidates()">Filter</button></div></div><div class="table-wrap"><table class="table"><thead><tr><th>Kandidat</th><th>Posisi</th><th>Lokasi</th><th>Tahap</th><th>Score</th><th>Applied</th><th>Aksi</th></tr></thead><tbody id="candidateTable"></tbody></table></div><div class="pagination"><span>Menampilkan 1–8 dari 128 kandidat</span><span>‹ 1 2 3 4 ›</span></div></div>
+</section>
+
+<section class="page" id="page-applications">
+ <div class="page-head"><div><h1>Manajemen Lamaran</h1><p>Screening dan pindahkan kandidat antar tahap recruitment.</p></div><div class="actions"><button class="btn btn-light" onclick="notify('Filter lanjutan dibuka')">☷ Filter Lanjutan</button></div></div>
+ <div class="card"><div class="card-pad"><div class="pipeline" style="grid-template-columns:repeat(5,1fr)"><div class="stage"><b>74</b><span>Screening</span></div><div class="stage"><b>38</b><span>Psikotes</span></div><div class="stage"><b>17</b><span>Interview</span></div><div class="stage"><b>7</b><span>Offering</span></div><div class="stage"><b>3</b><span>Hired</span></div></div></div><div class="table-wrap"><table class="table"><thead><tr><th>Kandidat</th><th>Posisi</th><th>Applied</th><th>Source</th><th>Tahap</th><th>Recruiter</th><th>Aksi</th></tr></thead><tbody id="applicationTable"></tbody></table></div></div>
+</section>
+
+<section class="page" id="page-vacancies">
+ <div class="page-head"><div><h1>Lowongan Pekerjaan</h1><p>Kelola posisi, requirement, status publikasi, dan jumlah kandidat.</p></div><button class="btn btn-gold" onclick="openModal('vacancy')">＋ Buat Lowongan</button></div>
+ <div class="job-cards" id="jobCards"></div>
+</section>
+
+<section class="page" id="page-interviews">
+ <div class="page-head"><div><h1>Interview Center</h1><p>Atur jadwal interview, interviewer, scorecard, dan hasil.</p></div><button class="btn btn-gold" onclick="openModal('interview')">＋ Jadwalkan Interview</button></div>
+ <div class="grid3"><div class="kpi"><span class="label">Hari ini</span><div class="value">5</div><span class="trend">2 menunggu feedback</span></div><div class="kpi"><span class="label">Minggu ini</span><div class="value">17</div><span class="trend">3 slot tersedia</span></div><div class="kpi"><span class="label">Feedback Pending</span><div class="value">6</div><span class="trend">Perlu follow-up</span></div></div>
+ <div class="card" style="margin-top:16px"><div class="card-head"><h3>Jadwal Interview</h3><select class="select" style="width:auto"><option>30 Sep 2026</option><option>1 Okt 2026</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Jam</th><th>Kandidat</th><th>Posisi</th><th>Interviewer</th><th>Mode</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="interviewTable"></tbody></table></div></div>
+</section>
+
+<section class="page" id="page-tests">
+ <div class="page-head"><div><h1>Psikotes & Assessment</h1><p>Monitor pengerjaan, score, passing grade, dan assessment kandidat.</p></div><button class="btn btn-gold" onclick="openModal('test')">＋ Buat Assessment</button></div>
+ <div class="grid4"><div class="kpi"><span class="label">Peserta</span><div class="value">38</div><span class="trend">32 selesai</span></div><div class="kpi"><span class="label">Rata-rata Score</span><div class="value">78%</div><span class="trend">+4% vs bulan lalu</span></div><div class="kpi"><span class="label">Passing Grade</span><div class="value">70%</div><span class="trend">26 lolos</span></div><div class="kpi"><span class="label">Pending</span><div class="value">6</div><span class="trend">Perlu review</span></div></div>
+ <div class="card" style="margin-top:16px"><div class="card-head"><h3>Hasil Assessment Terbaru</h3></div><div class="table-wrap"><table class="table"><thead><tr><th>Kandidat</th><th>Assessment</th><th>Score</th><th>Durasi</th><th>Hasil</th><th>Waktu</th><th>Aksi</th></tr></thead><tbody id="testTable"></tbody></table></div></div>
+</section>
+
+<section class="page" id="page-analytics">
+ <div class="page-head"><div><h1>Analytics & Report</h1><p>Insight recruitment untuk membantu HRD memonitor performa proses.</p></div><button class="btn btn-dark" onclick="exportCSV()">↓ Export Report</button></div>
+ <div class="grid4"><div class="kpi"><span class="label">Time to Screen</span><div class="value">1,8 <small style="font-size:12px">hari</small></div><span class="trend">↓ 0,4 hari</span></div><div class="kpi"><span class="label">Time to Hire</span><div class="value">12,4 <small style="font-size:12px">hari</small></div><span class="trend">↓ 1,2 hari</span></div><div class="kpi"><span class="label">Offer Acceptance</span><div class="value">82%</div><span class="trend">↑ 6%</span></div><div class="kpi"><span class="label">Hiring Target</span><div class="value">74%</div><span class="trend">37 / 50 posisi</span></div></div>
+ <div class="dashboard-grid"><div class="card"><div class="card-head"><h3>Lamaran 6 Bulan Terakhir</h3></div><div class="chart"><div class="col"><i style="height:38%"></i><span>Apr</span></div><div class="col"><i style="height:51%"></i><span>Mei</span></div><div class="col"><i style="height:46%"></i><span>Jun</span></div><div class="col"><i style="height:72%"></i><span>Jul</span></div><div class="col"><i style="height:64%"></i><span>Agu</span></div><div class="col"><i style="height:89%"></i><span>Sep</span></div></div></div><div class="card"><div class="card-head"><h3>Source Kandidat</h3></div><div class="card-pad"><div class="bar-list"><div class="bar-row"><span>Career Portal</span><div class="bar"><i style="width:82%"></i></div><b>41%</b></div><div class="bar-row"><span>Referral</span><div class="bar"><i style="width:52%"></i></div><b>26%</b></div><div class="bar-row"><span>LinkedIn</span><div class="bar"><i style="width:34%"></i></div><b>17%</b></div><div class="bar-row"><span>Job Board</span><div class="bar"><i style="width:20%"></i></div><b>10%</b></div><div class="bar-row"><span>Lainnya</span><div class="bar"><i style="width:12%"></i></div><b>6%</b></div></div></div></div></div>
+</section>
+
+<section class="page" id="page-employees">
+ <div class="page-head"><div><h1>Database Karyawan</h1><p>Direktori karyawan aktif dan informasi dasar HR.</p></div><button class="btn btn-gold" onclick="openModal('employee')">＋ Tambah Karyawan</button></div>
+ <div class="card"><div class="table-wrap"><table class="table"><thead><tr><th>Karyawan</th><th>NIK</th><th>Jabatan</th><th>Departemen</th><th>Cabang</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="employeeTable"></tbody></table></div></div>
+</section>
+
+<section class="page" id="page-onboarding">
+ <div class="page-head"><div><h1>Onboarding</h1><p>Checklist proses kandidat yang sudah masuk tahap bergabung.</p></div></div>
+ <div class="grid3"><div class="kpi"><span class="label">Onboarding Aktif</span><div class="value">7</div><span class="trend">3 mulai minggu ini</span></div><div class="kpi"><span class="label">Dokumen Lengkap</span><div class="value">86%</div><span class="trend">↑ 8%</span></div><div class="kpi"><span class="label">Belum Lengkap</span><div class="value">2</div><span class="trend">Perlu follow-up</span></div></div>
+ <div class="card" style="margin-top:16px"><div class="card-head"><h3>Progress Onboarding</h3></div><div class="table-wrap"><table class="table"><thead><tr><th>Kandidat</th><th>Posisi</th><th>Start Date</th><th>Progress</th><th>Dokumen</th><th>Status</th></tr></thead><tbody><tr><td><div class="person"><div class="mini-avatar">RM</div><div><b>Rina Maharani</b><small>rina@email.com</small></div></div></td><td>Gold Advisor</td><td>05 Okt 2026</td><td><div class="bar"><i style="width:80%"></i></div></td><td><span class="badge green">Lengkap</span></td><td><span class="badge purple">Onboarding</span></td></tr><tr><td><div class="person"><div class="mini-avatar">AS</div><div><b>Andi Saputra</b><small>andi@email.com</small></div></div></td><td>Store Supervisor</td><td>07 Okt 2026</td><td><div class="bar"><i style="width:55%"></i></div></td><td><span class="badge yellow">2 Pending</span></td><td><span class="badge purple">Onboarding</span></td></tr></tbody></table></div></div>
+</section>
+
+<section class="page" id="page-documents">
+ <div class="page-head"><div><h1>Dokumen HR</h1><p>Kontrol dokumen kandidat dan karyawan secara terpusat.</p></div><button class="btn btn-gold" onclick="notify('Upload dokumen demo siap digunakan')">＋ Upload Dokumen</button></div>
+ <div class="card"><div class="card-pad"><div class="detail-grid"><div class="detail"><small>CV / Resume</small><b>124 dokumen</b></div><div class="detail"><small>KTP</small><b>117 dokumen</b></div><div class="detail"><small>Ijazah</small><b>109 dokumen</b></div><div class="detail"><small>Kontrak Kerja</small><b>31 dokumen</b></div><div class="detail"><small>Dokumen Pending</small><b style="color:var(--red)">8 dokumen</b></div><div class="detail"><small>Storage Used</small><b>1,8 GB / 10 GB</b></div></div></div></div>
+</section>
+
+<section class="page" id="page-settings">
+ <div class="page-head"><div><h1>Pengaturan Sistem</h1><p>Konfigurasi workflow recruitment dan akses admin.</p></div><button class="btn btn-gold" onclick="notify('Pengaturan berhasil disimpan')">Simpan Perubahan</button></div>
+ <div class="card card-pad"><div class="form-grid"><div class="form-group"><label>Nama Perusahaan</label><input class="input" value="Raja Emas Indonesia"></div><div class="form-group"><label>Email HRD</label><input class="input" value="hrd@rajaemasindonesia.co.id"></div><div class="form-group"><label>Passing Grade Psikotes</label><input class="input" value="70"></div><div class="form-group"><label>Maks. Hari Review</label><input class="input" value="14"></div><div class="form-group span2"><label>Workflow Seleksi</label><input class="input" value="Screening → Psikotes → Interview → Offering → Hired"></div></div></div>
+</section>
+
+</main></div></div>
+
+<div class="modal-bg" id="modal"><div class="modal"><div class="modal-head"><h3 id="modalTitle">Form</h3><button class="close" onclick="closeModal()">×</button></div><div class="modal-body" id="modalBody"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const candidates=[
+{name:"Rina Maharani",email:"rina@email.com",pos:"Gold Advisor",loc:"Jakarta",stage:"Interview",score:88,applied:"29 Sep 2026",source:"Career Portal"},
+{name:"Andi Saputra",email:"andi@email.com",pos:"Store Supervisor",loc:"Bekasi",stage:"Offering",score:91,applied:"28 Sep 2026",source:"Referral"},
+{name:"Dewi Lestari",email:"dewi@email.com",pos:"Store Supervisor",loc:"Jakarta",stage:"Psikotes",score:82,applied:"28 Sep 2026",source:"Career Portal"},
+{name:"Fajar Ramadhan",email:"fajar@email.com",pos:"Customer Service",loc:"Semarang",stage:"Screening",score:76,applied:"27 Sep 2026",source:"LinkedIn"},
+{name:"Siti Aulia",email:"siti@email.com",pos:"Admin Operasional",loc:"Bandung",stage:"Psikotes",score:84,applied:"26 Sep 2026",source:"Job Board"},
+{name:"Bima Pratama",email:"bima@email.com",pos:"Gold Advisor",loc:"Surabaya",stage:"Screening",score:72,applied:"25 Sep 2026",source:"Career Portal"},
+{name:"Nadia Putri",email:"nadia@email.com",pos:"Finance & Accounting",loc:"Jakarta",stage:"Rejected",score:61,applied:"24 Sep 2026",source:"Career Portal"},
+{name:"Rizky Hidayat",email:"rizky@email.com",pos:"IT Support Intern",loc:"Jakarta",stage:"Interview",score:89,applied:"23 Sep 2026",source:"LinkedIn"}
+];
+const jobs=[
+{id:1,title:"Gold Advisor",loc:"Jakarta",type:"Full Time",dept:"Sales",apps:34,status:"Aktif"},
+{id:2,title:"Gold Advisor",loc:"Bekasi",type:"Full Time",dept:"Sales",apps:21,status:"Aktif"},
+{id:3,title:"Store Supervisor",loc:"Jakarta",type:"Full Time",dept:"Management",apps:27,status:"Aktif"},
+{id:4,title:"Customer Service",loc:"Semarang",type:"Full Time",dept:"Customer Service",apps:20,status:"Aktif"},
+{id:5,title:"Admin Operasional",loc:"Bandung",type:"Full Time",dept:"Administration",apps:17,status:"Aktif"},
+{id:6,title:"Marketing Executive",loc:"Surabaya",type:"Kontrak",dept:"Marketing",apps:12,status:"Aktif"},
+{id:7,title:"Finance & Accounting Staff",loc:"Jakarta",type:"Full Time",dept:"Finance",apps:9,status:"Aktif"},
+{id:8,title:"IT Support Intern",loc:"Jakarta",type:"Internship",dept:"Technology",apps:10,status:"Draft"}
+];
+function initials(n){return n.split(" ").map(x=>x[0]).slice(0,2).join("")}
+function badgeStage(s){const m={Interview:"purple",Offering:"green",Psikotes:"blue",Screening:"yellow",Rejected:"red"};return `<span class="badge ${m[s]||"purple"}">${s}</span>`}
+function showPage(p){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById("page-"+p).classList.add("active");document.querySelectorAll(".nav-btn").forEach(x=>x.classList.toggle("active",x.dataset.page===p));if(p==="candidates")renderCandidates();if(p==="applications")renderApplications();if(p==="vacancies")renderJobs();if(p==="interviews")renderInterviews();if(p==="tests")renderTests();if(p==="employees")renderEmployees();document.getElementById("sidebar").classList.remove("open");window.scrollTo({top:0,behavior:"smooth"})}
+function toggleSide(){document.getElementById("sidebar").classList.toggle("open")}
+function notify(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2400)}
+function renderDashboard(){document.getElementById("dashboardTable").innerHTML=candidates.slice(0,5).map(c=>`<tr><td><div class="person"><div class="mini-avatar">${initials(c.name)}</div><div><b>${c.name}</b><small>${c.email}</small></div></div></td><td>${c.pos}</td><td>${badgeStage(c.stage)}</td><td><b>${c.score}%</b></td><td><span class="badge ${c.stage==="Rejected"?"red":"yellow"}">${c.stage==="Interview"?"Feedback pending":"Follow-up"}</span></td><td><button class="btn btn-light btn-sm" onclick="openCandidate('${c.name}')">Detail</button></td></tr>`).join("")}
+function renderCandidates(){const q=(document.getElementById("candidateSearch")?.value||"").toLowerCase(),st=document.getElementById("candidateStage")?.value||"",loc=document.getElementById("candidateLoc")?.value||"";let arr=candidates.filter(c=>(!q||(c.name+" "+c.email+" "+c.pos).toLowerCase().includes(q))&&(!st||c.stage===st)&&(!loc||c.loc===loc));document.getElementById("candidateTable").innerHTML=arr.map(c=>`<tr><td><div class="person"><div class="mini-avatar">${initials(c.name)}</div><div><b>${c.name}</b><small>${c.email}</small></div></div></td><td>${c.pos}</td><td>${c.loc}</td><td>${badgeStage(c.stage)}</td><td><b>${c.score}%</b></td><td>${c.applied}</td><td><button class="btn btn-light btn-sm" onclick="openCandidate('${c.name}')">Lihat</button> <button class="btn btn-gold btn-sm" onclick="notify('Kandidat dipindahkan ke tahap berikutnya')">Next</button></td></tr>`).join("")||`<tr><td colspan="7" style="text-align:center;padding:30px;color:#888">Tidak ada kandidat.</td></tr>`}
+function renderApplications(){document.getElementById("applicationTable").innerHTML=candidates.map(c=>`<tr><td><div class="person"><div class="mini-avatar">${initials(c.name)}</div><div><b>${c.name}</b><small>${c.email}</small></div></div></td><td>${c.pos}</td><td>${c.applied}</td><td>${c.source}</td><td>${badgeStage(c.stage)}</td><td>HRD Team</td><td><button class="btn btn-light btn-sm" onclick="openCandidate('${c.name}')">Detail</button></td></tr>`).join("")}
+function renderJobs(){document.getElementById("jobCards").innerHTML=jobs.map(j=>`<div class="job-card"><span class="badge ${j.status==="Aktif"?"green":"yellow"}">${j.status}</span><h3>${j.title}</h3><p>Raja Emas Indonesia • ${j.loc}</p><div class="job-meta"><span>♟ ${j.dept}</span><span>⌁ ${j.type}</span><span>▤ ${j.apps} pelamar</span></div><div style="display:flex;gap:7px"><button class="btn btn-light btn-sm" onclick="openJob('${j.title}')">Kelola</button><button class="btn btn-gold btn-sm" onclick="notify('Lowongan dibuka di portal kandidat')">Publikasikan</button></div></div>`).join("")}
+function renderInterviews(){const data=[["09.30","Andi Saputra","Store Supervisor","Ibu Lily","Offline","Selesai"],["10.30","Rina Maharani","Gold Advisor","Bpk. Dimas","Google Meet","Terjadwal"],["11.30","Rizky Hidayat","IT Support Intern","Ibu Sari","Online","Feedback"],["13.30","Dewi Lestari","Store Supervisor","Ibu Lily","Offline","Terjadwal"],["15.00","Fajar Ramadhan","Customer Service","Bpk. Dimas","Online","Terjadwal"]];document.getElementById("interviewTable").innerHTML=data.map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td>${x[2]}</td><td>${x[3]}</td><td>${x[4]}</td><td><span class="badge ${x[5]==="Selesai"?"green":x[5]==="Feedback"?"yellow":"purple"}">${x[5]}</span></td><td><button class="btn btn-light btn-sm" onclick="notify('Scorecard interview dibuka')">Scorecard</button></td></tr>`).join("")}
+function renderTests(){const data=[["Dewi Lestari","Basic Aptitude","82%","08:44","Lulus","30 Sep"],["Siti Aulia","Personality Test","84%","09:02","Lulus","30 Sep"],["Andi Saputra","Leadership Assessment","91%","07:38","Lulus","29 Sep"],["Bima Pratama","Basic Aptitude","72%","09:51","Lulus","29 Sep"],["Nadia Putri","Basic Aptitude","61%","10:00","Tidak Lulus","28 Sep"]];document.getElementById("testTable").innerHTML=data.map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td><b>${x[2]}</b></td><td>${x[3]}</td><td><span class="badge ${x[4]==="Lulus"?"green":"red"}">${x[4]}</span></td><td>${x[5]}</td><td><button class="btn btn-light btn-sm" onclick="notify('Detail assessment dibuka')">Detail</button></td></tr>`).join("")}
+function renderEmployees(){const data=[["Dimas Prakoso","REI-00182","HR Manager","HRD","Jakarta","Aktif"],["Sari Wulandari","REI-00191","HR Staff","HRD","Jakarta","Aktif"],["Lily Permata","REI-00214","Store Supervisor","Operasional","Bekasi","Aktif"],["Budi Santoso","REI-00231","Gold Advisor","Sales","Jakarta","Aktif"],["Maya Putri","REI-00244","Finance Staff","Finance","Jakarta","Aktif"]];document.getElementById("employeeTable").innerHTML=data.map(x=>`<tr><td><div class="person"><div class="mini-avatar">${initials(x[0])}</div><div><b>${x[0]}</b></div></div></td><td>${x[1]}</td><td>${x[2]}</td><td>${x[3]}</td><td>${x[4]}</td><td><span class="badge green">${x[5]}</span></td><td><button class="btn btn-light btn-sm" onclick="notify('Profil karyawan dibuka')">Detail</button></td></tr>`).join("")}
+function openCandidate(name){const c=candidates.find(x=>x.name===name);openCustom("Detail Kandidat",`<div class="detail-grid"><div class="detail"><small>Nama</small><b>${c.name}</b></div><div class="detail"><small>Email</small><b>${c.email}</b></div><div class="detail"><small>Posisi</small><b>${c.pos}</b></div><div class="detail"><small>Lokasi</small><b>${c.loc}</b></div><div class="detail"><small>Tahap</small><b>${c.stage}</b></div><div class="detail"><small>Assessment Score</small><b>${c.score}%</b></div></div><div style="margin-top:15px"><b>Quick Action</b><div class="actions" style="margin-top:9px"><button class="btn btn-gold" onclick="notify('Kandidat dipindahkan ke tahap berikutnya');closeModal()">Next Stage</button><button class="btn btn-light" onclick="notify('Interview dijadwalkan');closeModal()">Schedule Interview</button><button class="btn btn-danger" onclick="notify('Kandidat ditandai rejected');closeModal()">Reject</button></div></div>`)}
+function openJob(title){openCustom("Kelola Lowongan",`<div class="detail-grid"><div class="detail"><small>Posisi</small><b>${title}</b></div><div class="detail"><small>Status</small><b>Aktif</b></div><div class="detail"><small>Publikasi</small><b>Career Portal</b></div><div class="detail"><small>Workflow</small><b>Screening → Test → Interview</b></div></div><div class="form-actions"><button class="btn btn-light" onclick="closeModal()">Tutup</button><button class="btn btn-gold" onclick="notify('Perubahan lowongan disimpan');closeModal()">Simpan</button></div>`)}
+function openModal(type){let title="",body="";if(type==="candidate"){title="Tambah Kandidat";body=`<div class="form-grid">${fg("Nama Lengkap","Nama kandidat")}${fg("Email","nama@email.com")}${fg("No. WhatsApp","08xxxxxxxxxx")}${fg("Posisi","Gold Advisor")}${fg("Lokasi","Jakarta")}${fg("Sumber","Career Portal")}<div class="form-group span2"><label>Catatan HRD</label><textarea class="textarea" rows="3"></textarea></div></div><div class="form-actions"><button class="btn btn-light" onclick="closeModal()">Batal</button><button class="btn btn-gold" onclick="notify('Kandidat berhasil ditambahkan');closeModal()">Simpan Kandidat</button></div>`}
+else if(type==="vacancy"){title="Buat Lowongan";body=`<div class="form-grid">${fg("Nama Posisi","Contoh: Gold Advisor")}${fg("Departemen","Sales")}${fg("Lokasi","Jakarta")}${fg("Tipe Kerja","Full Time")}${fg("Jumlah Kebutuhan","5")}${fg("Batas Lamaran","31 Oktober 2026")}<div class="form-group span2"><label>Deskripsi</label><textarea class="textarea" rows="4" placeholder="Tanggung jawab dan requirement..."></textarea></div></div><div class="form-actions"><button class="btn btn-light" onclick="closeModal()">Batal</button><button class="btn btn-gold" onclick="notify('Lowongan berhasil dibuat');closeModal()">Buat Lowongan</button></div>`}
+else if(type==="interview"){title="Jadwalkan Interview";body=`<div class="form-grid">${fg("Kandidat","Pilih kandidat")}${fg("Interviewer","Pilih interviewer")}${fg("Tanggal","30 September 2026")}${fg("Jam","09:30")}${fg("Mode","Online / Offline")}${fg("Link / Ruangan","Google Meet / Ruang HR")}</div><div class="form-actions"><button class="btn btn-light" onclick="closeModal()">Batal</button><button class="btn btn-gold" onclick="notify('Interview berhasil dijadwalkan');closeModal()">Jadwalkan</button></div>`}
+else if(type==="test"){title="Buat Assessment";body=`<div class="form-grid">${fg("Nama Assessment","Basic Aptitude Test")}${fg("Passing Grade","70%")}${fg("Durasi","10 menit")}${fg("Jumlah Soal","20")}</div><div class="form-actions"><button class="btn btn-light" onclick="closeModal()">Batal</button><button class="btn btn-gold" onclick="notify('Assessment berhasil dibuat');closeModal()">Simpan</button></div>`}
+else {title="Tambah Karyawan";body=`<div class="form-grid">${fg("Nama Lengkap","Nama karyawan")}${fg("NIK","NIK")}${fg("Jabatan","Jabatan")}${fg("Departemen","HRD")}${fg("Cabang","Jakarta")}${fg("Tanggal Masuk","01 Oktober 2026")}</div><div class="form-actions"><button class="btn btn-light" onclick="closeModal()">Batal</button><button class="btn btn-gold" onclick="notify('Karyawan berhasil ditambahkan');closeModal()">Simpan</button></div>`}openCustom(title,body)}
+function fg(label,ph){return `<div class="form-group"><label>${label}</label><input class="input" placeholder="${ph}"></div>`}
+function openCustom(title,body){document.getElementById("modalTitle").textContent=title;document.getElementById("modalBody").innerHTML=body;document.getElementById("modal").classList.add("show")}
+function closeModal(){document.getElementById("modal").classList.remove("show")}
+function exportCSV(){const rows=[["Nama","Posisi","Lokasi","Tahap","Score","Applied"],...candidates.map(c=>[c.name,c.pos,c.loc,c.stage,c.score,c.applied])];const csv=rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="hrd-recruitment-report.csv";a.click();URL.revokeObjectURL(a.href);notify("Report CSV berhasil dibuat")}
+document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal()});
+renderDashboard();renderCandidates();
+</script>
+</body>
+</html>
