@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raja Emas Indonesia — Career Portal</title>
+<meta name="description" content="Demo Career Portal Raja Emas Indonesia">
+<style>
+:root{
+  --gold:#D4AF37;--gold2:#F5E6A8;--gold3:#B88916;
+  --ink:#10091A;--purple:#2B0A45;--purple2:#4A176B;
+  --bg:#F7F5F2;--white:#fff;--muted:#6D6875;--line:#E8E1D7;
+  --success:#17824B;--danger:#B42318;--shadow:0 18px 50px rgba(20,8,30,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f8f7f5;color:#1c1820;line-height:1.55}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0}
+a{text-decoration:none;color:inherit}
+.container{width:min(1160px,92%);margin:auto}
+.topbar{background:var(--ink);color:#fff;font-size:13px}
+.topbar .container{display:flex;justify-content:space-between;gap:16px;padding:9px 0}
+.nav{position:sticky;top:0;z-index:50;background:rgba(16,9,26,.94);backdrop-filter:blur(14px);border-bottom:1px solid rgba(212,175,55,.18)}
+.nav-inner{height:74px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:11px;color:#fff}
+.logo{width:43px;height:43px;border:1px solid var(--gold);border-radius:13px;display:grid;place-items:center;color:var(--gold);font-size:22px;background:linear-gradient(145deg,#33203f,#10091A);box-shadow:0 0 24px rgba(212,175,55,.15)}
+.brand b{font-family:Georgia,serif;letter-spacing:.7px;font-size:18px}
+.brand small{display:block;color:#d9cda8;font-size:9px;letter-spacing:2px}
+.nav-actions{display:flex;align-items:center;gap:9px}
+.btn{padding:11px 17px;border-radius:11px;font-weight:750;transition:.2s}
+.btn:hover{transform:translateY(-1px)}
+.btn-gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#211506;box-shadow:0 8px 20px rgba(212,175,55,.2)}
+.btn-outline{border:1px solid rgba(212,175,55,.5);background:transparent;color:#fff}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-light{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.hero{position:relative;overflow:hidden;background:radial-gradient(circle at 75% 20%,#51206d 0,#2B0A45 28%,#10091A 72%);color:#fff}
+.hero:before{content:"";position:absolute;width:440px;height:440px;border:1px solid rgba(212,175,55,.18);border-radius:50%;right:-110px;top:-150px}
+.hero:after{content:"";position:absolute;width:240px;height:240px;border:1px solid rgba(212,175,55,.12);border-radius:50%;right:80px;bottom:-160px}
+.hero-inner{min-height:510px;display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:58px;padding:72px 0}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;color:var(--gold2);font-size:12px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;margin-bottom:15px}
+.eyebrow:before{content:"";width:28px;height:2px;background:var(--gold)}
+.hero h1{font-family:Georgia,serif;font-size:clamp(38px,5vw,62px);line-height:1.04;letter-spacing:-1.2px;margin-bottom:20px}
+.hero h1 span{color:var(--gold)}
+.hero p{color:#ddd4e4;max-width:650px;font-size:17px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.hero-card{position:relative;background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.15);border-radius:25px;padding:28px;box-shadow:var(--shadow);backdrop-filter:blur(10px)}
+.crown{font-size:70px;text-align:center;filter:drop-shadow(0 8px 20px rgba(212,175,55,.25));color:var(--gold2)}
+.hero-card h3{font-family:Georgia,serif;text-align:center;font-size:25px}
+.hero-card p{text-align:center;font-size:13px;margin:7px auto 20px;color:#d8ccdf}
+.mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mini-stat{background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:12px;text-align:center}
+.mini-stat b{display:block;color:var(--gold2);font-size:20px}
+.mini-stat span{font-size:10px;color:#d5ced9}
+.section{padding:70px 0}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:25px}
+.section-head h2{font-family:Georgia,serif;font-size:34px;color:var(--ink)}
+.section-head p{color:var(--muted);max-width:570px}
+.searchbar{display:grid;grid-template-columns:1.5fr 1fr 1fr auto;gap:10px;margin-bottom:25px}
+.field{position:relative}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:11px;padding:12px 13px;outline:0;color:#201a23}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,.12)}
+.jobs{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.job{background:#fff;border:1px solid #e6e0d8;border-radius:15px;padding:21px;box-shadow:0 3px 14px rgba(20,8,30,.035);transition:.2s}
+.job:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:#dcc47a}
+.job-top{display:flex;justify-content:space-between;gap:12px}
+.job-icon{width:46px;height:46px;border-radius:13px;background:#fbf4dc;color:#8b6810;display:grid;place-items:center;font-size:20px}
+.badge{display:inline-flex;padding:5px 9px;border-radius:999px;background:#f4eff7;color:#63327d;font-size:11px;font-weight:800}
+.job h3{margin:15px 0 5px;font-size:18px}
+.job .company{color:var(--muted);font-size:13px}
+.job-meta{display:flex;flex-wrap:wrap;gap:7px;margin:15px 0;color:#5d5762;font-size:12px}
+.job-meta span{background:#faf8f5;border:1px solid #eee8de;padding:5px 8px;border-radius:8px}
+.job-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:15px}
+.steps{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.step-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding:35px 0}
+.step{display:flex;gap:13px}
+.step-no{min-width:38px;height:38px;border-radius:12px;background:var(--ink);color:var(--gold2);display:grid;place-items:center;font-weight:900}
+.step h4{margin-bottom:3px}.step p{font-size:12px;color:var(--muted)}
+.footer{background:var(--ink);color:#d9d1df;padding:40px 0}
+.footer-inner{display:flex;justify-content:space-between;gap:30px;align-items:center}
+.footer b{color:#fff}.footer small{color:#aaa0ad}
+.overlay{position:fixed;inset:0;background:rgba(8,4,12,.72);z-index:100;display:none;align-items:center;justify-content:center;padding:18px}
+.overlay.show{display:flex}
+.modal{width:min(520px,100%);background:#fff;border-radius:22px;box-shadow:0 30px 100px #0008;overflow:hidden}
+.modal-head{padding:20px 22px;background:linear-gradient(135deg,var(--ink),var(--purple));color:#fff;display:flex;justify-content:space-between;align-items:center}
+.modal-head h3{font-family:Georgia,serif}
+.close{background:transparent;color:#fff;font-size:24px}
+.modal-body{padding:22px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:#f7f3f8;border-radius:11px;padding:4px;margin-bottom:18px}
+.tab{padding:9px;text-align:center;border-radius:8px;background:transparent;font-weight:800;color:#6b6470}
+.tab.active{background:#fff;box-shadow:0 3px 10px #0000000c;color:var(--ink)}
+.form-group{margin-bottom:13px}.form-group label{font-size:12px;font-weight:800;display:block;margin-bottom:5px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px}
+.full{width:100%}.notice{padding:11px 13px;border-radius:10px;background:#fff8e1;color:#765600;font-size:12px;margin-bottom:15px}
+.dashboard{display:none;min-height:100vh;background:#f5f2ee}
+.dash-nav{background:var(--ink);color:#fff;position:sticky;top:0;z-index:40}
+.dash-nav .container{height:68px;display:flex;align-items:center;justify-content:space-between}
+.dash-main{padding:35px 0}
+.dash-grid{display:grid;grid-template-columns:250px 1fr;gap:22px}
+.sidebar{background:#fff;border:1px solid var(--line);border-radius:15px;padding:10px;height:max-content;position:sticky;top:90px}
+.side-btn{width:100%;text-align:left;background:transparent;padding:12px;border-radius:10px;font-weight:750;color:#514a56;margin-bottom:3px}
+.side-btn.active,.side-btn:hover{background:#fbf4dc;color:#735509}
+.content-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px}
+.welcome{background:linear-gradient(135deg,var(--ink),var(--purple2));color:#fff;border-radius:18px;padding:26px;margin-bottom:20px}
+.welcome p{color:#d8cede;font-size:13px}
+.progress{height:9px;background:#eee8e0;border-radius:99px;overflow:hidden;margin-top:12px}
+.progress i{display:block;height:100%;width:25%;background:linear-gradient(90deg,var(--gold3),var(--gold2));border-radius:99px}
+.dash-section{display:none}.dash-section.active{display:block}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid .span2{grid-column:1/-1}
+.test-list{display:grid;gap:12px}
+.test-q{border:1px solid var(--line);border-radius:14px;padding:17px}
+.test-q h4{font-size:14px;margin-bottom:10px}
+.options{display:grid;gap:7px}
+.option{border:1px solid var(--line);padding:10px 12px;border-radius:10px;cursor:pointer}
+.option:hover{border-color:var(--gold)}.option input{margin-right:8px}
+.result-box{text-align:center;padding:35px 20px;border:1px dashed #d8c79a;border-radius:16px;background:#fffcf2}
+.countdown{font-size:38px;font-weight:900;color:var(--purple);margin:10px 0}
+.timeline{display:grid;gap:13px;margin-top:20px}
+.tline{display:flex;gap:13px;align-items:flex-start}.dot{width:12px;height:12px;border-radius:50%;background:var(--gold);margin-top:7px;box-shadow:0 0 0 5px #fbf4dc}
+.tline small{color:var(--muted)}
+.toast{position:fixed;right:18px;bottom:18px;background:var(--ink);color:#fff;padding:13px 17px;border-radius:12px;z-index:200;display:none;box-shadow:var(--shadow)}
+.toast.show{display:block}
+@media(max-width:900px){
+ .hero-inner{grid-template-columns:1fr}.hero-card{max-width:520px}.jobs{grid-template-columns:repeat(2,1fr)}
+ .step-grid{grid-template-columns:repeat(2,1fr)}.searchbar{grid-template-columns:1fr 1fr}.searchbar .btn{grid-column:1/-1}
+ .dash-grid{grid-template-columns:1fr}.sidebar{position:static;display:flex;overflow-x:auto;gap:6px}.side-btn{white-space:nowrap;width:auto;flex:0 0 auto}
+}
+@media(max-width:600px){
+ .topbar{display:none}.nav-inner{height:64px}.brand b{font-size:15px}.nav-actions .btn-outline{display:none}
+ .hero-inner{padding:50px 0}.hero h1{font-size:42px}.hero p{font-size:15px}.section{padding:50px 0}
+ .jobs{grid-template-columns:1fr}.step-grid{grid-template-columns:1fr}.searchbar{grid-template-columns:1fr}
+ .form-grid{grid-template-columns:1fr}.form-grid .span2{grid-column:auto}.footer-inner{flex-direction:column;align-items:flex-start}
+ .modal-body{padding:18px}
+}
+
+/* Added usability */
+.nav-menu{display:flex;align-items:center;gap:18px;color:#ddd4e4;font-size:13px}
+.nav-menu a:hover{color:var(--gold2)}
+.job-actions{display:flex;gap:7px;align-items:center}
+.icon-btn{width:38px;height:38px;border:1px solid var(--line);border-radius:10px;background:#fff;color:#6b5a19}
+.icon-btn.saved{background:#fbf4dc;border-color:#d9bf67}
+.detail-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.detail-item{padding:12px;background:#faf8f5;border:1px solid #eee8de;border-radius:10px;font-size:12px}
+.detail-item b{display:block;color:#312a34;margin-bottom:3px;font-size:13px}
+.filter-info{font-size:12px;color:var(--muted);margin:-10px 0 18px}
+.empty-state{grid-column:1/-1;text-align:center;padding:38px 20px;background:#fff;border:1px dashed #ddd3c6;border-radius:15px;color:var(--muted)}
+.profile-meter{margin:15px 0 22px;padding:14px;border-radius:12px;background:#faf8f5;border:1px solid #eee8de}
+.profile-meter-row{display:flex;justify-content:space-between;gap:10px;font-size:12px}
+.profile-meter-bar{height:7px;background:#e9e4dc;border-radius:99px;overflow:hidden;margin-top:8px}
+.profile-meter-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold3),var(--gold));border-radius:99px}
+.test-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.timer{font-weight:900;color:var(--purple);background:#f5eff8;border-radius:10px;padding:8px 11px;min-width:88px;text-align:center}
+.notice.info{background:#f3f6fb;color:#3d536f}
+.application-list{display:grid;gap:12px}
+.application-item{border:1px solid var(--line);border-radius:13px;padding:16px;background:#fff}
+.application-item .row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.status-pill{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800;background:#f4eff7;color:#63327d}
+.status-pill.green{background:#eaf7ef;color:#176b40}
+.mobile-menu-btn{display:none;background:transparent;color:#fff;font-size:24px}
+@media(max-width:900px){
+ .nav-menu{display:none}.mobile-menu-btn{display:block}.nav-inner{position:relative}
+ .nav-actions{margin-left:auto}
+ .detail-list{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+ .container{width:min(94%,1160px)}
+ .hero-inner{min-height:auto;padding:48px 0 55px;gap:34px}
+ .hero h1{font-size:40px;letter-spacing:-.8px}
+ .hero-cta .btn{width:100%}
+ .hero-card{padding:22px}
+ .mini-stat b{font-size:17px}
+ .section-head{display:block}
+ .section-head h2{font-size:30px;margin-top:3px}
+ .section-head p{margin-top:8px}
+ .searchbar{gap:8px}
+ .job{padding:18px}
+ .job-footer{align-items:flex-end}
+ .nav-actions .btn{padding:9px 12px}
+ .brand small{letter-spacing:1.5px}
+ .brand b{font-size:14px}
+ .dash-main{padding:20px 0}
+ .welcome{padding:20px}
+ .content-card{padding:18px}
+ .test-header{align-items:flex-start}
+ .timer{font-size:12px}
+}
+
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="container"><span>Career Portal • PT Raja Emas Indonesia</span><span>Proses rekrutmen dilakukan secara bertahap</span></div></div>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="#" onclick="goHome();return false">
+      <div class="logo">♛</div>
+      <div><b>RAJA EMAS INDONESIA</b><small>CAREER PORTAL</small></div>
+    </a>
+    <nav class="nav-menu">
+        <a href="#jobs">Lowongan</a>
+        <a href="#process">Proses</a>
+        <a href="#about">Tentang</a>
+      </nav>
+      <div class="nav-actions">
+      <button class="btn btn-outline" onclick="openAuth('login')">Masuk</button>
+      <button class="btn btn-gold" onclick="openAuth('register')">Daftar</button>
+    </div>
+  </div>
+</header>
+
+<main id="landing">
+<section class="hero">
+  <div class="container hero-inner">
+    <div>
+      <div class="eyebrow">Career Portal</div>
+      <h1>Bangun Kariermu Bersama <span>Raja Emas Indonesia.</span></h1>
+      <p>Temukan peluang kerja yang sesuai dengan kemampuanmu. Daftar, lengkapi biodata, ikuti proses psikotes, lalu pantau status lamaran langsung dari portal kandidat.</p>
+      <div class="hero-cta">
+        <button class="btn btn-gold" onclick="scrollToJobs()">Lihat Lowongan</button>
+        <button class="btn btn-outline" onclick="openAuth('register')">Buat Akun Kandidat</button>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="crown">♛</div>
+      <h3>Raja Emas Indonesia</h3>
+      <p>Portal rekrutmen digital untuk mempermudah kandidat mengikuti proses seleksi.</p>
+      <div class="mini-stats">
+        <div class="mini-stat"><b>8+</b><span>Lowongan</span></div>
+        <div class="mini-stat"><b>4</b><span>Tahapan</span></div>
+        <div class="mini-stat"><b>1–14</b><span>Hari Review</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="jobs">
+<div class="container">
+  <div class="section-head">
+    <div><div class="eyebrow" style="color:#7b5b0b">Opportunities</div><h2>Lowongan Tersedia</h2></div>
+    <p>Cari posisi berdasarkan kata kunci, lokasi, atau tipe pekerjaan. Buka detail lowongan sebelum mengirim lamaran.</p>
+  </div>
+  <div class="searchbar">
+    <div class="field"><input id="search" placeholder="Cari posisi..." oninput="renderJobs()"></div>
+    <div class="field"><select id="location" onchange="renderJobs()"><option value="">Semua lokasi</option><option>Jakarta</option><option>Bekasi</option><option>Bandung</option><option>Surabaya</option><option>Semarang</option></select></div>
+    <div class="field"><select id="type" onchange="renderJobs()"><option value="">Semua tipe</option><option>Full Time</option><option>Kontrak</option><option>Internship</option></select></div>
+    <button class="btn btn-dark" onclick="resetFilter()">Reset</button>
+  </div>
+  <div class="jobs" id="jobList"></div>
+</div>
+</section>
+
+<section class="steps" id="process"><div class="container step-grid">
+  <div class="step"><div class="step-no">1</div><div><h4>Registrasi / Login</h4><p>Buat akun kandidat untuk memulai proses.</p></div></div>
+  <div class="step"><div class="step-no">2</div><div><h4>Lengkapi Biodata</h4><p>Isi data diri, pendidikan, pengalaman dan CV.</p></div></div>
+  <div class="step"><div class="step-no">3</div><div><h4>Psikotes</h4><p>Kerjakan tes yang tersedia pada dashboard.</p></div></div>
+  <div class="step"><div class="step-no">4</div><div><h4>Tunggu Hasil</h4><p>Status seleksi dipantau selama 1–14 hari.</p></div></div>
+</div></section>
+</main>
+
+<footer class="footer" id="about"><div class="container footer-inner">
+  <div><b>RAJA EMAS INDONESIA — CAREER PORTAL</b><br><small>Demo UI/UX portal kandidat. Data pada versi ini tersimpan lokal di browser.</small></div>
+  <small>© 2026 Raja Emas Indonesia</small>
+</div></footer>
+
+
+<div class="overlay" id="jobModal">
+  <div class="modal">
+    <div class="modal-head"><h3 id="jobModalTitle">Detail Lowongan</h3><button class="close" onclick="closeJob()">×</button></div>
+    <div class="modal-body" id="jobModalBody"></div>
+  </div>
+</div>
+
+<div class="overlay" id="authModal">
+  <div class="modal">
+    <div class="modal-head"><h3 id="authTitle">Masuk ke Career Portal</h3><button class="close" onclick="closeAuth()">×</button></div>
+    <div class="modal-body">
+      <div class="tabs"><button id="tabLogin" class="tab active" onclick="switchAuth('login')">Login</button><button id="tabRegister" class="tab" onclick="switchAuth('register')">Register</button></div>
+      <div id="loginForm">
+        <div class="notice">Demo: akun dibuat dan disimpan hanya pada browser ini.</div>
+        <div class="form-group"><label>Email</label><input id="loginEmail" type="email" placeholder="nama@email.com"></div>
+        <div class="form-group"><label>Password</label><input id="loginPass" type="password" placeholder="••••••••"></div>
+        <button class="btn btn-gold full" onclick="login()">Masuk</button>
+      </div>
+      <div id="registerForm" style="display:none">
+        <div class="form-group"><label>Nama Lengkap</label><input id="regName" placeholder="Nama lengkap"></div>
+        <div class="form-group"><label>Email</label><input id="regEmail" type="email" placeholder="nama@email.com"></div>
+        <div class="form-group"><label>Password</label><input id="regPass" type="password" placeholder="Minimal 6 karakter"></div>
+        <button class="btn btn-gold full" onclick="register()">Buat Akun</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard" id="dashboard">
+<header class="dash-nav"><div class="container">
+  <a class="brand" href="#" onclick="return false"><div class="logo">♛</div><div><b>RAJA EMAS INDONESIA</b><small>CAREER PORTAL</small></div></a>
+  <div><span id="userTop" style="font-size:13px;margin-right:10px"></span><button class="btn btn-outline" onclick="logout()">Keluar</button></div>
+</div></header>
+<div class="container dash-main">
+  <div class="dash-grid">
+    <aside class="sidebar">
+      <button class="side-btn active" data-section="overview" onclick="showSection('overview')">🏠 Dashboard</button>
+      <button class="side-btn" data-section="profile" onclick="showSection('profile')">👤 Biodata</button>
+      <button class="side-btn" data-section="test" onclick="showSection('test')">🧠 Psikotes</button>
+      <button class="side-btn" data-section="application" onclick="showSection('application')">📄 Lamaran</button>
+      <button class="side-btn" data-section="result" onclick="showSection('result')">⏳ Hasil Seleksi</button>
+      <button class="side-btn" data-section="notification" onclick="showSection('notification')">🔔 Notifikasi</button>
+    </aside>
+    <section>
+      <div class="welcome"><div class="eyebrow">Candidate Dashboard</div><h2>Halo, <span id="welcomeName">Kandidat</span> 👋</h2><p>Lengkapi tahapan seleksi untuk melanjutkan proses rekrutmen.</p><div class="progress"><i id="dashProgress"></i></div><small id="progressText">25% selesai</small></div>
+
+      <div class="dash-section active" id="section-overview">
+        <div class="content-card"><h2>Status Proses</h2><div class="timeline">
+          <div class="tline"><i class="dot"></i><div><b>Akun dibuat</b><br><small id="accountDate">Selesai</small></div></div>
+          <div class="tline"><i class="dot"></i><div><b>Biodata kandidat</b><br><small id="profileStatus">Belum lengkap</small></div></div>
+          <div class="tline"><i class="dot"></i><div><b>Psikotes</b><br><small id="testStatus">Belum dikerjakan</small></div></div>
+          <div class="tline"><i class="dot"></i><div><b>Review & hasil seleksi</b><br><small id="resultStatus">Menunggu psikotes</small></div></div>
+        </div></div>
+      </div>
+
+      <div class="dash-section" id="section-profile">
+        <div class="content-card"><h2>Lengkapi Biodata</h2><p style="color:var(--muted);margin:4px 0 20px">Pastikan data sesuai dokumen resmi agar proses administrasi lebih mudah.</p>
+         <div class="profile-meter"><div class="profile-meter-row"><b>Kelengkapan profil</b><span id="profilePercent">0%</span></div><div class="profile-meter-bar"><i id="profileBar" style="width:0%"></i></div></div>
+        <div class="form-grid">
+          <div class="form-group"><label>Nama Lengkap</label><input id="pName"></div>
+          <div class="form-group"><label>NIK</label><input id="pNik" inputmode="numeric" placeholder="16 digit"></div>
+          <div class="form-group"><label>No. WhatsApp</label><input id="pPhone" inputmode="tel" placeholder="08xxxxxxxxxx"></div>
+          <div class="form-group"><label>Tanggal Lahir</label><input id="pBirth" type="date"></div>
+          <div class="form-group"><label>Pendidikan Terakhir</label><select id="pEdu"><option value="">Pilih</option><option>SMA/SMK</option><option>D3</option><option>S1</option><option>S2</option></select></div>
+          <div class="form-group"><label>Domisili</label><input id="pCity" placeholder="Kota tempat tinggal"></div>
+          <div class="form-group span2"><label>Alamat</label><textarea id="pAddress" rows="3" placeholder="Alamat lengkap"></textarea></div>
+          <div class="form-group span2"><label>CV / Resume (nama file)</label><input id="pCv" type="file" accept=".pdf,.doc,.docx"></div>
+        </div>
+        <button class="btn btn-gold" onclick="saveProfile()">Simpan Biodata</button>
+        </div>
+      </div>
+
+      <div class="dash-section" id="section-test">
+        <div class="content-card"><div class="test-header"><div><h2>Psikotes Kandidat</h2><p style="color:var(--muted);margin:4px 0">Jawab 5 pertanyaan berikut dengan pilihan yang paling sesuai.</p></div><div class="timer" id="testTimer">10:00</div></div>
+          <div class="notice">Pastikan kamu sudah melengkapi biodata sebelum mengerjakan psikotes.</div>
+          <div class="test-list" id="testList"></div>
+          <button class="btn btn-gold" style="margin-top:18px" onclick="submitTest()">Kirim Jawaban Psikotes</button>
+        </div>
+      </div>
+
+      <div class="dash-section" id="section-application">
+        <div class="content-card"><h2>Lamaran Saya</h2><div id="applicationBox"></div></div>
+      </div>
+
+      <div class="dash-section" id="section-result">
+        <div class="content-card"><h2>Hasil Seleksi</h2><div id="resultBox"></div></div>
+      </div>
+    </section>
+  </div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const jobs=[
+ {id:1,title:"Gold Advisor",loc:"Jakarta",type:"Full Time",cat:"Sales",desc:"Melayani pelanggan dan memberikan informasi produk serta proses transaksi emas."},
+ {id:2,title:"Gold Advisor",loc:"Bekasi",type:"Full Time",cat:"Sales",desc:"Membangun hubungan dengan pelanggan dan mendukung pencapaian target outlet."},
+ {id:3,title:"Store Supervisor",loc:"Jakarta",type:"Full Time",cat:"Management",desc:"Mengelola operasional outlet, tim, pelayanan dan pencapaian target."},
+ {id:4,title:"Customer Service",loc:"Semarang",type:"Full Time",cat:"Customer Service",desc:"Menangani kebutuhan informasi dan layanan pelanggan secara profesional."},
+ {id:5,title:"Admin Operasional",loc:"Bandung",type:"Full Time",cat:"Administration",desc:"Mengelola administrasi, dokumen dan data operasional outlet."},
+ {id:6,title:"Marketing Executive",loc:"Surabaya",type:"Kontrak",cat:"Marketing",desc:"Mendukung aktivitas pemasaran, promosi dan pengembangan pelanggan."},
+ {id:7,title:"Finance & Accounting Staff",loc:"Jakarta",type:"Full Time",cat:"Finance",desc:"Mendukung pencatatan transaksi, rekonsiliasi dan administrasi keuangan."},
+ {id:8,title:"IT Support Intern",loc:"Jakarta",type:"Internship",cat:"Technology",desc:"Membantu dukungan perangkat, aplikasi internal dan kebutuhan IT perusahaan."}
+];
+const questions=[
+ {q:"Saat menghadapi pelanggan yang komplain, tindakan pertama yang paling tepat adalah...",o:["Mendengarkan dan memahami masalah","Memotong pembicaraan","Mengabaikan pelanggan","Langsung menyalahkan sistem"]},
+ {q:"Jika memiliki beberapa pekerjaan dengan deadline berdekatan, kamu sebaiknya...",o:["Membuat prioritas berdasarkan urgensi","Mengerjakan secara acak","Menunda semuanya","Menunggu diingatkan"]},
+ {q:"Dalam kerja tim, ketika terjadi perbedaan pendapat...",o:["Mencari solusi melalui diskusi","Memaksakan pendapat","Menghindari semua komunikasi","Membiarkan konflik"]},
+ {q:"Jika menemukan kesalahan data transaksi, kamu sebaiknya...",o:["Melaporkan dan melakukan pengecekan sesuai prosedur","Menghapus data tanpa catatan","Menyembunyikannya","Membiarkan saja"]},
+ {q:"Dalam melayani pelanggan, hal yang paling penting adalah...",o:["Akurasi, sikap profesional dan komunikasi","Berbicara secepat mungkin","Mengutamakan diri sendiri","Menghindari pertanyaan pelanggan"]}
+];
+
+function getUser(){return JSON.parse(localStorage.getItem("rei_candidate")||"null")}
+function saveUser(u){localStorage.setItem("rei_candidate",JSON.stringify(u))}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2800)}
+function scrollToJobs(){document.getElementById("jobs").scrollIntoView({behavior:"smooth"})}
+function goHome(){document.getElementById("dashboard").style.display="none";document.getElementById("landing").style.display="block";window.scrollTo(0,0)}
+function openAuth(mode="login"){document.getElementById("authModal").classList.add("show");switchAuth(mode)}
+function closeAuth(){document.getElementById("authModal").classList.remove("show")}
+function switchAuth(mode){
+ const login=mode==="login";document.getElementById("loginForm").style.display=login?"block":"none";document.getElementById("registerForm").style.display=login?"none":"block";
+ document.getElementById("tabLogin").classList.toggle("active",login);document.getElementById("tabRegister").classList.toggle("active",!login);
+ document.getElementById("authTitle").textContent=login?"Masuk ke Career Portal":"Daftar Akun Kandidat";
+}
+function register(){
+ const name=document.getElementById("regName").value.trim(),email=document.getElementById("regEmail").value.trim(),pass=document.getElementById("regPass").value;
+ if(!name||!email||pass.length<6)return toast("Lengkapi data. Password minimal 6 karakter.");
+ const u={name,email,pass,profile:{},application:null,applications:[],savedJobs:[],testDone:false,testScore:null,resultDate:null,created:new Date().toLocaleDateString("id-ID")};
+ saveUser(u);closeAuth();enterDashboard();toast("Akun berhasil dibuat. Lengkapi biodata terlebih dahulu.");
+}
+function login(){
+ const email=document.getElementById("loginEmail").value.trim(),pass=document.getElementById("loginPass").value,u=getUser();
+ if(!u||u.email!==email||u.pass!==pass)return toast("Akun demo tidak ditemukan atau password salah. Silakan Register terlebih dahulu.");
+ closeAuth();enterDashboard();toast("Berhasil masuk ke Career Portal.");
+}
+function logout(){localStorage.removeItem("rei_session");goHome();toast("Kamu telah keluar.")}
+function enterDashboard(){
+ localStorage.setItem("rei_session","1");document.getElementById("landing").style.display="none";document.getElementById("dashboard").style.display="block";refreshDashboard();window.scrollTo(0,0)
+}
+function refreshDashboard(){
+ const u=getUser();if(!u)return;
+ document.getElementById("userTop").textContent=u.email;document.getElementById("welcomeName").textContent=u.name;
+ document.getElementById("pName").value=u.profile?.name||u.name;document.getElementById("pNik").value=u.profile?.nik||"";
+ document.getElementById("pPhone").value=u.profile?.phone||"";document.getElementById("pBirth").value=u.profile?.birth||"";
+ document.getElementById("pEdu").value=u.profile?.edu||"";document.getElementById("pCity").value=u.profile?.city||"";
+ document.getElementById("pAddress").value=u.profile?.address||"";
+ const profileDone=!!(u.profile?.nik&&u.profile?.phone&&u.profile?.birth&&u.profile?.edu&&u.profile?.city&&u.profile?.address);
+ document.getElementById("profileStatus").textContent=profileDone?"Lengkap":"Belum lengkap";
+  const profileKeys=["nik","phone","birth","edu","city","address"],profilePct=Math.round(profileKeys.filter(k=>u.profile?.[k]).length/profileKeys.length*100);
+  document.getElementById("profilePercent").textContent=profilePct+"%";
+  document.getElementById("profileBar").style.width=profilePct+"%";
+ document.getElementById("testStatus").textContent=u.testDone?"Selesai":"Belum dikerjakan";
+ document.getElementById("resultStatus").textContent=u.testDone?"Dalam proses review":"Menunggu psikotes";
+ let pct=25+(profileDone?25:0)+(u.application?25:0)+(u.testDone?25:0);
+ document.getElementById("dashProgress").style.width=pct+"%";document.getElementById("progressText").textContent=pct+"% selesai";
+ renderApplication();renderResult();
+}
+function saveProfile(){
+ const u=getUser();u.profile={name:document.getElementById("pName").value.trim(),nik:document.getElementById("pNik").value.trim(),phone:document.getElementById("pPhone").value.trim(),birth:document.getElementById("pBirth").value,edu:document.getElementById("pEdu").value,city:document.getElementById("pCity").value.trim(),address:document.getElementById("pAddress").value.trim()};
+ const required=["nik","phone","birth","edu","city","address"];if(required.some(k=>!u.profile[k])){saveUser(u);refreshDashboard();return toast("Biodata tersimpan sebagian. Lengkapi semua field wajib.");}
+ saveUser(u);refreshDashboard();toast("Biodata berhasil disimpan.");
+}
+function applyJob(id){
+  const u=getUser();if(!u)return openAuth("login");
+  const profileDone=!!(u.profile?.nik&&u.profile?.phone&&u.profile?.birth&&u.profile?.edu&&u.profile?.city&&u.profile?.address);
+  if(!profileDone){enterDashboard();showSection("profile");return toast("Lengkapi biodata terlebih dahulu sebelum melamar.")}
+  const job=jobs.find(j=>j.id===id); if(!job)return;
+  u.applications=u.applications||[];
+  if(u.applications.some(a=>a.id===id)){enterDashboard();showSection("application");return toast("Kamu sudah melamar posisi ini.")}
+  u.applications.push({...job,appliedAt:new Date().toISOString(),status:"Lamaran diterima"});
+  u.application=job; saveUser(u); closeJob(); enterDashboard(); showSection("application"); refreshDashboard();
+  toast("Lamaran berhasil dikirim.");
+}
+function renderJobs(){
+  const q=document.getElementById("search").value.toLowerCase().trim(),loc=document.getElementById("location").value,type=document.getElementById("type").value;
+  const filtered=jobs.filter(j=>(!q||(j.title+" "+j.cat+" "+j.desc+" "+j.loc).toLowerCase().includes(q))&&(!loc||j.loc===loc)&&(!type||j.type===type));
+  const list=document.getElementById("jobList");
+  const saved=getUser()?.savedJobs||[];
+  const info=document.getElementById("filterInfo");
+  if(info) info.textContent=`${filtered.length} posisi ditemukan`;
+  list.innerHTML=filtered.map(j=>`<article class="job">
+    <div class="job-top"><div class="job-icon">♛</div><span class="badge">${j.type}</span></div>
+    <h3>${j.title}</h3><div class="company">Raja Emas Indonesia</div>
+    <p style="font-size:13px;color:#625c66;margin-top:8px">${j.desc}</p>
+    <div class="job-meta"><span>📍 ${j.loc}</span><span>▦ ${j.cat}</span><span>↗ Aktif</span></div>
+    <div class="job-footer"><div class="job-actions">
+      <button class="icon-btn ${saved.includes(j.id)?"saved":""}" title="Simpan lowongan" onclick="toggleSave(${j.id})">☆</button>
+      <button class="btn btn-light" onclick="openJob(${j.id})">Detail</button>
+    </div><button class="btn btn-gold" onclick="applyJob(${j.id})">Lamar</button></div>
+  </article>`).join("")||`<div class="empty-state"><b>Lowongan tidak ditemukan</b><br><small>Coba ubah kata kunci atau filter lokasi.</small></div>`;
+}
+function resetFilter(){document.getElementById("search").value="";document.getElementById("location").value="";document.getElementById("type").value="";renderJobs()}
+function showSection(name){
+ document.querySelectorAll(".dash-section").forEach(x=>x.classList.remove("active"));document.getElementById("section-"+name).classList.add("active");
+ document.querySelectorAll(".side-btn").forEach(x=>x.classList.toggle("active",x.dataset.section===name));
+ if(name==="test"){renderTest();startTestTimer();}
+ if(name==="application")renderApplication();
+ if(name==="result")renderResult();
+}
+
+let testTimerInterval=null,testSeconds=600;
+function startTestTimer(){
+  clearInterval(testTimerInterval);
+  const u=getUser(); if(u?.testDone)return;
+  testSeconds=600;
+  const el=document.getElementById("testTimer"); if(!el)return;
+  const tick=()=>{const m=String(Math.floor(testSeconds/60)).padStart(2,"0"),s=String(testSeconds%60).padStart(2,"0");el.textContent=`${m}:${s}`;if(testSeconds<=0){clearInterval(testTimerInterval);toast("Waktu psikotes habis.");}else testSeconds--;};
+  tick();testTimerInterval=setInterval(tick,1000);
+}
+
+function renderTest(){
+ const u=getUser();document.getElementById("testList").innerHTML=questions.map((x,i)=>`<div class="test-q"><h4>${i+1}. ${x.q}</h4><div class="options">${x.o.map((o,k)=>`<label class="option"><input type="radio" name="q${i}" value="${k}" ${u.testDone?"disabled":""}>${o}</label>`).join("")}</div></div>`).join("");
+ if(u.testDone)document.querySelector("#section-test .btn-gold").disabled=true;
+}
+function submitTest(){
+ const u=getUser();if(u.testDone)return toast("Psikotes sudah dikirim.");
+ const profileDone=!!(u.profile?.nik&&u.profile?.phone&&u.profile?.birth&&u.profile?.edu&&u.profile?.city&&u.profile?.address);
+ if(!profileDone)return showSection("profile"),toast("Lengkapi biodata sebelum mengerjakan psikotes.");
+ for(let i=0;i<questions.length;i++)if(!document.querySelector(`input[name=q${i}]:checked`))return toast("Jawab semua pertanyaan terlebih dahulu.");
+ const answerKey=[0,0,0,0,0],score=answerKey.reduce((n,k,i)=>n+(Number(document.querySelector(`input[name=q${i}]:checked`).value)===k?1:0),0);
+  u.testDone=true;u.testScore=score;u.resultDate=new Date(Date.now()+14*24*60*60*1000).toISOString();saveUser(u);refreshDashboard();showSection("result");toast("Psikotes berhasil dikirim. Status menunggu review.");
+}
+function renderApplication(){
+  const u=getUser(),box=document.getElementById("applicationBox"),apps=u?.applications||[];
+  if(!apps.length){
+    box.innerHTML=`<div class="result-box"><h3>Belum ada lamaran</h3><p style="color:var(--muted);margin:7px 0 18px">Pilih lowongan yang sesuai dan kirim lamaran dari halaman lowongan.</p><button class="btn btn-gold" onclick="goHome();scrollToJobs()">Lihat Lowongan</button></div>`;return
+  }
+  box.innerHTML=`<div class="application-list">${apps.map(a=>`<div class="application-item">
+    <div class="row"><div><span class="badge">${a.type}</span><h3 style="margin:8px 0 2px">${a.title}</h3><small style="color:var(--muted)">Raja Emas Indonesia • ${a.loc}</small></div><span class="status-pill green">✓ ${a.status}</span></div>
+    <div class="job-meta"><span>📍 ${a.loc}</span><span>▦ ${a.cat}</span><span>🗓 ${new Date(a.appliedAt).toLocaleDateString("id-ID")}</span></div>
+    <small style="color:var(--muted)">Lamaran tercatat di akun kandidat. Tahap berikutnya mengikuti proses seleksi perusahaan.</small>
+  </div>`).join("")}</div>`;
+}
+function renderResult(){
+ const u=getUser(),box=document.getElementById("resultBox");
+ if(!u.testDone){box.innerHTML=`<div class="result-box"><h3>Hasil belum tersedia</h3><p style="color:var(--muted)">Selesaikan psikotes terlebih dahulu. Setelah itu proses review akan dimulai.</p></div>`;return}
+ const target=new Date(u.resultDate||Date.now()+14*86400000);let diff=Math.max(0,target-new Date());let days=Math.ceil(diff/86400000);
+ box.innerHTML=`<div class="result-box"><div style="font-size:46px">⏳</div><h3>Lamaran sedang dalam proses review</h3><p style="color:var(--muted);max-width:560px;margin:8px auto">Hasil seleksi dapat diperbarui dalam rentang <b>1–14 hari</b> setelah psikotes, sesuai proses internal perusahaan.</p><div class="countdown">${days} hari</div><small style="color:var(--muted)">Estimasi batas pemantauan demo: ${target.toLocaleDateString("id-ID",{day:"2-digit",month:"long",year:"numeric"})}</small><div style="margin-top:18px"><span class="badge">STATUS: REVIEW HR</span></div></div>`;
+}
+
+function toggleSave(id){
+  const u=getUser(); if(!u)return openAuth("login");
+  u.savedJobs=u.savedJobs||[];
+  u.savedJobs=u.savedJobs.includes(id)?u.savedJobs.filter(x=>x!==id):[...u.savedJobs,id];
+  saveUser(u);renderJobs();toast(u.savedJobs.includes(id)?"Lowongan disimpan.":"Lowongan dihapus dari simpanan.");
+}
+function openJob(id){
+  const j=jobs.find(x=>x.id===id);if(!j)return;
+  document.getElementById("jobModalTitle").textContent=j.title;
+  document.getElementById("jobModalBody").innerHTML=`<span class="badge">${j.type}</span><p style="color:var(--muted);margin:10px 0 0">Raja Emas Indonesia • ${j.loc}</p>
+    <div class="detail-list"><div class="detail-item"><b>Departemen</b>${j.cat}</div><div class="detail-item"><b>Lokasi</b>${j.loc}</div><div class="detail-item"><b>Tipe kerja</b>${j.type}</div><div class="detail-item"><b>Status</b>Lowongan aktif</div></div>
+    <h4 style="margin-bottom:7px">Tentang posisi</h4><p style="color:#625c66;font-size:13px">${j.desc}</p>
+    <h4 style="margin:18px 0 7px">Proses kandidat</h4><p style="color:#625c66;font-size:13px">Registrasi → Biodata → Lamaran → Psikotes → Review & hasil seleksi.</p>
+    <button class="btn btn-gold full" style="margin-top:18px" onclick="applyJob(${j.id})">Lamar posisi ini</button>`;
+  document.getElementById("jobModal").classList.add("show");
+}
+function closeJob(){document.getElementById("jobModal").classList.remove("show")}
+function renderNotifications(){
+  const u=getUser(),box=document.getElementById("notificationBox"); if(!box)return;
+  const items=[
+    ["Akun kandidat aktif","Akun kamu sudah siap digunakan untuk melamar lowongan.","Baru"],
+    ...(u?.application?[["Lamaran tercatat",`Lamaran ${u.application.title} sudah masuk ke akun kamu.`,"Lamaran"]]:[]),
+    ...(u?.testDone?[["Psikotes terkirim","Jawaban psikotes sudah tercatat dan menunggu proses review.","Psikotes"]]:[])
+  ];
+  box.innerHTML=items.map(x=>`<div class="application-item" style="margin-bottom:10px"><div class="row"><div><b>${x[0]}</b><p style="font-size:13px;color:var(--muted);margin-top:3px">${x[1]}</p></div><span class="status-pill">${x[2]}</span></div></div>`).join("");
+}
+
+function checkSession(){if(localStorage.getItem("rei_session")&&getUser())enterDashboard();else renderJobs()}
+document.getElementById("authModal").addEventListener("click",e=>{if(e.target.id==="authModal")closeAuth()});
+document.getElementById("jobModal").addEventListener("click",e=>{if(e.target.id==="jobModal")closeJob()});
+checkSession();
+</script>
+</body>
+</html>
